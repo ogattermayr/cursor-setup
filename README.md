@@ -4,28 +4,28 @@ Reusable Cursor AI skills, subagents, and commands for web development projects.
 
 ## Installation
 
-### Option 1: Remote Rule (Recommended)
-
-In any Cursor project:
-1. Open **Cursor Settings** (Cmd+Shift+J)
-2. Navigate to **Rules**
-3. Click **Add Rule** → **Remote Rule (GitHub)**
-4. Enter: `https://github.com/ogattermayr/cursor-setup`
-
-Skills will auto-sync when the repo updates.
-
-### Option 2: Copy to Global
+### Option 1: Copy to Global (Recommended)
 
 Copy to your user-level Cursor folder for all projects:
 
 ```bash
-cp -r skills/* ~/.cursor/skills/
-cp -r agents/* ~/.cursor/agents/
+# Clone the repo
+git clone https://github.com/ogattermayr/cursor-setup.git
+
+# Copy to global Cursor folders
+cp -r cursor-setup/skills/* ~/.cursor/skills/
+cp -r cursor-setup/agents/* ~/.cursor/agents/
 ```
 
-### Option 3: Copy to Project
+Skills and subagents will be available in ALL Cursor projects.
 
-Copy to a specific project's `.cursor/` folder.
+### Option 2: Copy to Project
+
+Copy to a specific project's `.cursor/` folder for project-specific usage.
+
+### Note on Remote Rules
+
+Remote Rules (GitHub import) only work for `.cursor/rules/` files, not skills or agents. Use the copy method above for skills.
 
 ---
 
