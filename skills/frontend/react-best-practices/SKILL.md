@@ -42,15 +42,6 @@ const [user, posts, comments] = await Promise.all([
 ])
 ```
 
-**Direct imports:**
-```tsx
-// BAD - Loads entire library
-import { Check } from 'lucide-react'
-
-// GOOD - Loads only what you need
-import Check from 'lucide-react/dist/esm/icons/check'
-```
-
 **Dynamic components:**
 ```tsx
 import dynamic from 'next/dynamic'
@@ -137,18 +128,14 @@ Reducing initial bundle size improves Time to Interactive and LCP.
 ### 2.1 Avoid barrel file imports
 
 ```tsx
-// BAD - Loads entire icon library (thousands of icons)
-import { Check } from 'lucide-react'
-
-// GOOD - Loads only the icon you need
-import Check from 'lucide-react/dist/esm/icons/check'
-
 // BAD - Loads all utilities
 import { formatDate } from '@/utils'
 
 // GOOD - Direct import
 import { formatDate } from '@/utils/date'
 ```
+
+> **Note:** For `lucide-react`, Next.js automatically optimizes imports via `optimizePackageImports` in next.config. Use normal named imports: `import { Check } from 'lucide-react'`
 
 ### 2.2 Dynamic imports for heavy components
 
@@ -333,15 +320,17 @@ const ids = new Set([1, 2, 3, 4, 5])
 if (ids.has(targetId)) { ... }
 ```
 
-### 5.2 Use toSorted() instead of sort()
+### 5.2 Avoid mutating arrays with sort()
 
 ```typescript
 // BAD - Mutates original array
 const sorted = items.sort((a, b) => a.name.localeCompare(b.name))
 
-// GOOD - Returns new array
-const sorted = items.toSorted((a, b) => a.name.localeCompare(b.name))
+// GOOD - Spread first to avoid mutation
+const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name))
 ```
+
+> **Note:** `toSorted()` is ES2023 and may not have full TypeScript support in all environments. Use `[...arr].sort()` for safer compatibility.
 
 ### 5.3 Hoist static objects outside components
 
@@ -388,19 +377,17 @@ items.forEach(item => {
 ## Common pitfalls to avoid
 
 **DON'T:**
-- Use barrel imports from large libraries
+- Use barrel imports from large libraries (except lucide-react which Next.js auto-optimizes)
 - Block parallel operations with sequential awaits
 - Re-render entire trees when only part needs updating
 - Load analytics/tracking in the critical path
-- Mutate arrays with `.sort()` instead of `.toSorted()`
 - Create RegExp or heavy objects inside render
 
 **DO:**
-- Import directly from source files
 - Use `Promise.all()` for independent operations
 - Memoize expensive components
 - Lazy-load non-critical code
-- Use immutable array methods
+- Use `[...arr].sort()` when you need to sort without mutating
 - Hoist static objects outside components
 
 ---
